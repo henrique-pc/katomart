@@ -4,13 +4,7 @@ import os
 import sys
 from pathlib import Path
 
-# Load .env before any Django imports
-try:
-    from dotenv import load_dotenv
-    BASE_DIR = Path(__file__).resolve().parent
-    load_dotenv(os.path.join(BASE_DIR, '.env'))
-except ImportError:
-    pass
+# Remove global dotenv loading here; SECRET_KEY will be loaded in settings.py only
 
 
 def main():

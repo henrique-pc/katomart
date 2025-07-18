@@ -12,18 +12,23 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
 
-# Load .env file
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(os.path.join(BASE_DIR, '.env'))
 
+def get_secret_key():
+    env_path = os.path.join(BASE_DIR, '.env')
+    if os.path.exists(env_path):
+        with open(env_path) as f:
+            for line in f:
+                if line.startswith('DJANGO_SECRET_KEY='):
+                    return line.strip().split('=', 1)[1]
+    return None
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # Load SECRET_KEY from .env
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-2gsw0=@t_o%zr_h6-jd)kz9ek151ewb8im+9fhh#h3%qr9euqq')
+SECRET_KEY = get_secret_key() or 'django-insecure-2gsw0=@t_o%zr_h6-jd)kz9ek151ewb8im+9fhh#h3%qr9euqq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
