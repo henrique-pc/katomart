@@ -166,3 +166,6 @@ logs/
 
 # Test output
 junit*.xml
+
+# Reference files
+old/
