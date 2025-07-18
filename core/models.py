@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 class TimestampMixin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -69,7 +70,8 @@ class PlatformAuth(TimestampMixin):
     extra_data = models.JSONField(default=dict, blank=True)
 
 class Course(TimestampMixin):
-    katomart_id = models.AutoField(primary_key=True)
+    internal_id = models.AutoField(primary_key=True)
+    katomart_id = models.UUIDField(null=True, blank=True, default=None)
     external_id = models.CharField(max_length=128, null=True, blank=True)
     extra_data = models.JSONField(default=dict, blank=True)
     name = models.CharField(max_length=256, null=True, blank=True)
@@ -94,7 +96,8 @@ class Course(TimestampMixin):
     auth = models.ForeignKey(PlatformAuth, on_delete=models.SET_NULL, null=True, blank=True, related_name="courses")
 
 class Module(TimestampMixin):
-    katomart_id = models.AutoField(primary_key=True)
+    internal_id = models.AutoField(primary_key=True)
+    katomart_id = models.UUIDField(null=True, blank=True, default=None)
     external_id = models.CharField(max_length=128, null=True, blank=True)
     extra_data = models.JSONField(default=dict, blank=True)
     name = models.CharField(max_length=256, null=True, blank=True)
@@ -115,7 +118,8 @@ class Module(TimestampMixin):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="modules", null=True, blank=True)
 
 class Lesson(TimestampMixin):
-    katomart_id = models.AutoField(primary_key=True)
+    internal_id = models.AutoField(primary_key=True)
+    katomart_id = models.UUIDField(null=True, blank=True, default=None)
     external_id = models.CharField(max_length=128, null=True, blank=True)
     extra_data = models.JSONField(default=dict, blank=True)
     name = models.CharField(max_length=256, null=True, blank=True)
@@ -133,10 +137,11 @@ class Lesson(TimestampMixin):
     is_downloaded = models.BooleanField(default=False)  # type: ignore[attr-defined]
     download_date = models.BigIntegerField(null=True, blank=True)
     download_type = models.CharField(max_length=64, null=True, blank=True)
-    module = models.ForeignKey(Module, on_delete=models.CASCADE, related_name="lessons", null=True, blank=True)
+    module = models.ForeignKey('Module', on_delete=models.CASCADE, related_name="lessons", null=True, blank=True)
 
 class File(TimestampMixin):
-    katomart_id = models.AutoField(primary_key=True)
+    internal_id = models.AutoField(primary_key=True)
+    katomart_id = models.UUIDField(null=True, blank=True, default=None)
     external_id = models.CharField(max_length=128, null=True, blank=True)
     extra_data = models.JSONField(default=dict, blank=True)
     name = models.CharField(max_length=256, null=True, blank=True)
@@ -156,7 +161,7 @@ class File(TimestampMixin):
     file_size = models.BigIntegerField(null=True, blank=True)
     file_type = models.CharField(max_length=64, null=True, blank=True)
     duration = models.IntegerField(null=True, blank=True)
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="files", null=True, blank=True)
+    lesson = models.ForeignKey('Lesson', on_delete=models.CASCADE, related_name="files", null=True, blank=True)
 
 def ensure_config_row_exists():
     """
