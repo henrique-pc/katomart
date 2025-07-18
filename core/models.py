@@ -157,3 +157,33 @@ class File(TimestampMixin):
     file_type = models.CharField(max_length=64, null=True, blank=True)
     duration = models.IntegerField(null=True, blank=True)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="files", null=True, blank=True)
+
+def ensure_config_row_exists():
+    """
+    Ensure the single Config row exists in the database (id=1).
+    Should be called at application startup.
+    """
+    from django.db import transaction
+    with transaction.atomic():
+        Config.objects.get_or_create(pk=1)
+
+def load_config():
+    """
+    Load the global configuration (single row).
+    Returns the Config instance.
+    """
+    ensure_config_row_exists()
+    return Config.objects.get(pk=1)
+
+def save_config(**kwargs):
+    """
+    Update and save the global configuration (single row).
+    Accepts keyword arguments for fields to update.
+    Returns the updated Config instance.
+    """
+    config = load_config()
+    for key, value in kwargs.items():
+        if hasattr(config, key):
+            setattr(config, key, value)
+    config.save()
+    return config
