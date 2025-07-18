@@ -6,10 +6,19 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Course, Module, Lesson, File, Config
-from .serializers import CourseSerializer, ModuleSerializer, LessonSerializer, FileSerializer, ConfigSerializer
+from .models import Course, Module, Lesson, File, SystemConfig, PlatformAuth, UserFormattedName, UserConfig
+from .serializers import CourseSerializer, ModuleSerializer, LessonSerializer, FileSerializer, SystemConfigSerializer, PlatformAuthSerializer, UserFormattedNameSerializer, UserConfigSerializer
+from django.contrib.auth import get_user_model
 
-# Create your views here.
+User = get_user_model()
+
+class IsOwnerOrSuperuser(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if isinstance(obj, PlatformAuth):
+            return obj.user == request.user
+        if isinstance(obj, UserFormattedName):
+            return obj.user == request.user
+        return False
 
 class LoginView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -43,7 +52,41 @@ class FileViewSet(viewsets.ModelViewSet):
     serializer_class = FileSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-class ConfigViewSet(viewsets.ModelViewSet):
-    queryset = Config.objects.all()  # type: ignore[attr-defined]
-    serializer_class = ConfigSerializer
+class SystemConfigViewSet(viewsets.ModelViewSet):
+    queryset = SystemConfig.objects.all()  # type: ignore[attr-defined]
+    serializer_class = SystemConfigSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+class PlatformAuthViewSet(viewsets.ModelViewSet):
+    queryset = PlatformAuth.objects.none()  # type: ignore[attr-defined]
+    serializer_class = PlatformAuthSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrSuperuser]
+
+    def get_queryset(self):
+        user = self.request.user
+        return PlatformAuth.objects.filter(user=user)  # type: ignore[attr-defined]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class UserFormattedNameViewSet(viewsets.ModelViewSet):
+    queryset = UserFormattedName.objects.none()  # type: ignore[attr-defined]
+    serializer_class = UserFormattedNameSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrSuperuser]
+
+    def get_queryset(self):
+        return UserFormattedName.objects.filter(user=self.request.user)  # type: ignore[attr-defined]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class UserConfigViewSet(viewsets.ModelViewSet):
+    queryset = UserConfig.objects.none()  # type: ignore[attr-defined]
+    serializer_class = UserConfigSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return UserConfig.objects.filter(user=self.request.user)  # type: ignore[attr-defined]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

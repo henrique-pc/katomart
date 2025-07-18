@@ -146,3 +146,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+APP_PORT = 6102  # Default application port for local server

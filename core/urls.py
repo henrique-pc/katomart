@@ -1,13 +1,16 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import LoginView, CourseViewSet, ModuleViewSet, LessonViewSet, FileViewSet, ConfigViewSet
+from .views import LoginView, CourseViewSet, ModuleViewSet, LessonViewSet, FileViewSet, SystemConfigViewSet, PlatformAuthViewSet, UserFormattedNameViewSet, UserConfigViewSet
 
 router = DefaultRouter()
 router.register(r'courses', CourseViewSet)
 router.register(r'modules', ModuleViewSet)
 router.register(r'lessons', LessonViewSet)
 router.register(r'files', FileViewSet)
-router.register(r'config', ConfigViewSet)
+router.register(r'systemconfig', SystemConfigViewSet)
+router.register(r'platformauth', PlatformAuthViewSet)
+router.register(r'formattednames', UserFormattedNameViewSet)
+router.register(r'userconfig', UserConfigViewSet)
 
 urlpatterns = [
     path('api/login/', LoginView.as_view(), name='api-login'),
