@@ -1,4 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.utils import translation
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.conf import settings
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -11,6 +15,18 @@ from .serializers import CourseSerializer, ModuleSerializer, LessonSerializer, F
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
+def change_language(request, language_code):
+    """Change the language and redirect back to the previous page"""
+    translation.activate(language_code)
+    request.session[settings.LANGUAGE_SESSION_KEY] = language_code
+    
+    # Get the referer URL or default to admin index
+    referer = request.META.get('HTTP_REFERER')
+    if referer:
+        return HttpResponseRedirect(referer)
+    else:
+        return redirect('admin:index')
 
 class IsOwnerOrSuperuser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):

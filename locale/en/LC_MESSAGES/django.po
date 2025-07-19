@@ -1,0 +1,236 @@
+# English translation for KatoMart Admin Interface
+# Copyright (C) 2025 KatoMart
+# This file is distributed under the same license as the KatoMart project.
+msgid ""
+msgstr ""
+"Project-Id-Version: KatoMart 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-19 02:57+0000\n"
+"PO-Revision-Date: 2025-01-19 02:57+0000\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/admin/base_site.html:4
+msgid "KatoMart Admin"
+msgstr "KatoMart Admin"
+
+#: templates/admin/index.html:89
+msgid "Quick Actions"
+msgstr "Quick Actions"
+
+#: templates/admin/index.html:92
+msgid "Add Platform"
+msgstr "Add Platform"
+
+#: templates/admin/index.html:95
+msgid "Add Course"
+msgstr "Add Course"
+
+#: templates/admin/index.html:98
+msgid "System Config"
+msgstr "System Config"
+
+#: templates/admin/index.html:101
+msgid "Add Auth"
+msgstr "Add Auth"
+
+#: templates/admin/index.html:107
+msgid "System Status"
+msgstr "System Status"
+
+#: templates/admin/index.html:111
+msgid "Database"
+msgstr "Database"
+
+#: templates/admin/index.html:112
+msgid "Connected"
+msgstr "Connected"
+
+#: templates/admin/index.html:115
+msgid "Admin Interface"
+msgstr "Admin Interface"
+
+#: templates/admin/index.html:116
+msgid "Active"
+msgstr "Active"
+
+#: templates/admin/index.html:119
+msgid "Authentication"
+msgstr "Authentication"
+
+#: templates/admin/index.html:120
+msgid "Ready"
+msgstr "Ready"
+
+#: templates/admin/index.html:123
+msgid "File System"
+msgstr "File System"
+
+#: templates/admin/index.html:124
+msgid "Accessible"
+msgstr "Accessible"
+
+#: templates/admin/index.html:158
+msgid "Add"
+msgstr "Add"
+
+#: templates/admin/index.html:167
+msgid "You don't have permission to view or edit anything."
+msgstr "You don't have permission to view or edit anything."
+
+#: templates/admin/index.html:175
+msgid "Recent actions"
+msgstr "Recent actions"
+
+#: templates/admin/index.html:178
+msgid "None available"
+msgstr "None available"
+
+#: templates/admin/index.html:189
+msgid "Unknown content"
+msgstr "Unknown content"
+
+#: core/admin.py:15
+msgid "General Settings"
+msgstr "General Settings"
+
+#: core/admin.py:18
+msgid "Tool Paths"
+msgstr "Tool Paths"
+
+#: core/admin.py:35
+msgid "Basic Information"
+msgstr "Basic Information"
+
+#: core/admin.py:39
+msgid "Configuration"
+msgstr "Configuration"
+
+#: core/admin.py:42
+msgid "Issues"
+msgstr "Issues"
+
+#: core/admin.py:45
+msgid "Additional Data"
+msgstr "Additional Data"
+
+#: core/admin.py:48
+msgid "Timestamps"
+msgstr "Timestamps"
+
+#: core/admin.py:58
+msgid "String Formatting"
+msgstr "String Formatting"
+
+#: core/admin.py:61
+msgid "Headers & Requests"
+msgstr "Headers & Requests"
+
+#: core/admin.py:64
+msgid "Visitation Limits"
+msgstr "Visitation Limits"
+
+#: core/admin.py:75
+msgid "Authentication"
+msgstr "Authentication"
+
+#: core/admin.py:78
+msgid "Encrypted Data"
+msgstr "Encrypted Data"
+
+#: core/admin.py:79
+msgid "Encrypted credentials - these are encrypted at runtime and not stored in plain text"
+msgstr "Encrypted credentials - these are encrypted at runtime and not stored in plain text"
+
+#: core/admin.py:82
+msgid "Token Information"
+msgstr "Token Information"
+
+#: core/admin.py:95
+msgid "Identifiers"
+msgstr "Identifiers"
+
+#: core/admin.py:98
+msgid "Status"
+msgstr "Status"
+
+#: core/admin.py:101
+msgid "Download Information"
+msgstr "Download Information"
+
+#: core/admin.py:104
+msgid "Platform & Authentication"
+msgstr "Platform & Authentication"
+
+#: core/admin.py:107
+msgid "DRM & Expiration"
+msgstr "DRM & Expiration"
+
+#: core/admin.py:125
+msgid "Download Information"
+msgstr "Download Information"
+
+#: core/admin.py:128
+msgid "Course"
+msgstr "Course"
+
+#: core/admin.py:131
+msgid "DRM"
+msgstr "DRM"
+
+#: core/admin.py:149
+msgid "Download Information"
+msgstr "Download Information"
+
+#: core/admin.py:152
+msgid "Module"
+msgstr "Module"
+
+#: core/admin.py:175
+msgid "Content Type"
+msgstr "Content Type"
+
+#: core/admin.py:178
+msgid "Status"
+msgstr "Status"
+
+#: core/admin.py:181
+msgid "File Information"
+msgstr "File Information"
+
+#: core/admin.py:184
+msgid "Download & DRM"
+msgstr "Download & DRM"
+
+#: core/admin.py:187
+msgid "Lesson"
+msgstr "Lesson"
+
+#: core/admin.py:197
+msgid "User Formatted Name"
+msgstr "User Formatted Name"
+
+#: core/admin.py:207
+msgid "User"
+msgstr "User"
+
+#: core/admin.py:210
+msgid "Paths"
+msgstr "Paths"
+
+#: core/admin.py:217
+msgid "KatoMart Administration"
+msgstr "KatoMart Administration"
+
+#: core/admin.py:218
+msgid "KatoMart Admin Portal"
+msgstr "KatoMart Admin Portal"
+
+#: core/admin.py:219
+msgid "Welcome to KatoMart Administration"
+msgstr "Welcome to KatoMart Administration" 

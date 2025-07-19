@@ -1,0 +1,113 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content_title %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-section">
+    <h2><i class="fas fa-bolt"></i> {% trans 'Quick Actions' %}</h2>
+    <div class="quick-actions-grid">
+        <a href="{% url 'admin:core_platform_add' %}" class="quick-action-btn">
+            <i class="fas fa-plus"></i>{% trans 'Add Platform' %}
+        </a>
+        <a href="{% url 'admin:core_course_add' %}" class="quick-action-btn">
+            <i class="fas fa-book"></i>{% trans 'Add Course' %}
+        </a>
+        <a href="{% url 'admin:core_systemconfig_changelist' %}" class="quick-action-btn">
+            <i class="fas fa-cog"></i>{% trans 'System Config' %}
+        </a>
+        <a href="{% url 'admin:core_platformauth_add' %}" class="quick-action-btn">
+            <i class="fas fa-shield-alt"></i>{% trans 'Add Auth' %}
+        </a>
+    </div>
+</div>
+<div class="dashboard-section">
+    <h2><i class="fas fa-heartbeat"></i> {% trans 'System Status' %}</h2>
+    <div class="status-grid">
+        <div class="status-item available">
+            <i class="fas fa-check-circle"></i>
+            <div class="label">{% trans 'Database' %}</div>
+            <div class="status">{% trans 'Connected' %}</div>
+        </div>
+        <div class="status-item available">
+            <i class="fas fa-check-circle"></i>
+            <div class="label">{% trans 'Admin Interface' %}</div>
+            <div class="status">{% trans 'Active' %}</div>
+        </div>
+        <div class="status-item available">
+            <i class="fas fa-check-circle"></i>
+            <div class="label">{% trans 'Authentication' %}</div>
+            <div class="status">{% trans 'Ready' %}</div>
+        </div>
+        <div class="status-item available">
+            <i class="fas fa-check-circle"></i>
+            <div class="label">{% trans 'File System' %}</div>
+            <div class="status">{% trans 'Accessible' %}</div>
+        </div>
+    </div>
+</div>
+<div class="dashboard-section">
+    <h2><i class="fas fa-th-large"></i> {% trans 'Apps' %}</h2>
+    <div class="apps-list">
+        {% if app_list %}
+            {% for app in app_list %}
+                <div class="dashboard-card">
+                    <div class="dashboard-card-header">
+                        <i class="fas {% if app.name == 'Core' %}fa-graduation-cap{% elif app.name == 'Authentication and Authorization' %}fa-users{% else %}fa-th-large{% endif %}"></i>
+                        {{ app.name }}
+                    </div>
+                    <div class="dashboard-card-content">
+                        <ul>
+                            {% for model in app.models %}
+                                <li>
+                                    {% if model.admin_url %}
+                                        <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                                    {% else %}
+                                        <span>{{ model.name }}</span>
+                                    {% endif %}
+                                    {% if model.add_url %}
+                                        <span class="count">{% trans 'Add' %}</span>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>{% trans "You don't have permission to view or edit anything." %}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module">
+        <h2><i class="fas fa-history"></i> {% trans 'Recent actions' %}</h2>
+        {% load log %}
+        {% get_admin_log 10 as admin_log for_user user %}
+        {% if not admin_log %}
+            <p>{% trans 'None available' %}</p>
+        {% else %}
+            <ul class="actionlist">
+                {% for entry in admin_log %}
+                    <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                        {% if entry.is_deletion or not entry.get_admin_url %}
+                            {{ entry.object_repr }}
+                        {% else %}
+                            <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                        {% endif %}
+                        <br>
+                        {% if entry.content_type %}
+                            <span class="mini quiet">{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}</span>
+                        {% else %}
+                            <span class="mini quiet">{% trans 'Unknown content' %}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,627 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('KatoMart Administration') }}{% endblock %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    :root {
+        --primary: #ef5350;
+        --primary-dark: #e53935;
+        --primary-light: #ffcdd2;
+        --surface: #ffffff;
+        --background: #f0f2f5;
+        --text-primary: #333333;
+        --text-secondary: #666666;
+        --success: #4caf50;
+        --error: #f44336;
+        --warning: #ff9800;
+        --border: #e0e0e0;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: var(--background);
+        color: var(--text-primary);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        font-size: 16px;
+    }
+
+    /* Header Styling */
+    #header {
+        background: var(--primary);
+        color: white;
+        padding: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-bottom: 3px solid var(--primary-dark);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #header #branding h1 {
+        color: white;
+        font-weight: 600;
+        font-size: 1.5rem;
+        margin: 0;
+        padding: 1rem 2rem;
+    }
+
+    #header #branding h1 a {
+        color: white;
+        text-decoration: none;
+    }
+
+    #header #branding h1 a:hover {
+        color: white;
+        text-decoration: none;
+    }
+
+    /* Hide default user tools */
+    #user-tools {
+        display: none;
+    }
+
+    /* Header right side components */
+    .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 2rem;
+    }
+
+    /* Language Selector */
+    .header-lang-select {
+        position: relative;
+        display: inline-block;
+    }
+
+    .header-lang-select select {
+        padding: 8px 12px;
+        height: auto;
+        line-height: normal;
+        background-color: transparent;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.5rem center;
+        background-size: 1rem;
+    }
+
+    .header-lang-select select:focus {
+        outline: none;
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+
+    .header-lang-select select option {
+        color: black;
+        background-color: white;
+    }
+
+    /* User Menu */
+    .header-user-menu {
+        position: relative;
+        display: inline-block;
+    }
+
+    .header-user-btn {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.1rem;
+    }
+
+    .header-user-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .header-user-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        min-width: 160px;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.2s ease;
+        margin-top: 0.5rem;
+    }
+
+    .header-user-menu:hover .header-user-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .header-user-dropdown a {
+        display: block;
+        padding: 0.75rem 1rem;
+        color: var(--text-primary);
+        text-decoration: none;
+        border-bottom: 1px solid #f0f0f0;
+        transition: background 0.2s ease;
+    }
+
+    .header-user-dropdown a:last-child {
+        border-bottom: none;
+    }
+
+    .header-user-dropdown a:hover {
+        background: #f8f9fa;
+        color: var(--primary);
+    }
+
+    .header-user-dropdown i {
+        margin-right: 0.5rem;
+        width: 1rem;
+        text-align: center;
+    }
+
+    /* Remove default sidebar */
+    #container {
+        display: block;
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Hide the sidebar completely using specific IDs */
+    #toggle-nav-sidebar {
+        display: none !important;
+    }
+
+    #nav-sidebar {
+        display: none !important;
+    }
+
+    /* Hide content-related sidebar in single column layout */
+    #content-related {
+        display: none !important;
+    }
+
+    /* Override any grid layouts to ensure full width */
+    .main {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Ensure content takes full width */
+    .content {
+        grid-column: 1 / -1 !important;
+        margin-left: 0 !important;
+    }
+
+    #content {
+        float: none !important;
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        margin-top: 3rem !important;
+        margin-bottom: 3rem !important;
+        padding: 2rem;
+        max-width: 1200px;
+        width: 100%;
+        grid-column: 1;
+    }
+
+    /* Remove legacy float/positioning styles */
+    .colM {
+        float: none !important;
+        position: static !important;
+        width: auto !important;
+    }
+
+    /* Breadcrumbs */
+    .breadcrumbs {
+        background: var(--surface);
+        padding: 1rem 2rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        font-size: 16px;
+    }
+
+    .breadcrumbs a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .breadcrumbs a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+
+    /* Main content area */
+    .main {
+        background: var(--surface);
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Dashboard sections */
+    .dashboard-section {
+        background: var(--surface);
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 2.5rem;
+        padding: 2rem 2.5rem;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .dashboard-section h2 {
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .dashboard-section h2 i {
+        font-size: 1.8rem;
+    }
+
+    /* Quick Actions */
+    .quick-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .quick-action-btn {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        border: none;
+        padding: 1.25rem;
+        border-radius: 8px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .quick-action-btn:hover {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, #b71c1c 100%);
+        transform: translateY(-2px);
+        color: white;
+        text-decoration: none;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .quick-action-btn i {
+        margin-right: 0.5rem;
+    }
+
+    /* Status Grid */
+    .status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .status-item {
+        text-align: center;
+        padding: 1.25rem;
+        border-radius: 8px;
+        background: #f8f9fa;
+        color: var(--text-primary);
+        border: 1px solid #e0e0e0;
+    }
+
+    .status-item.available {
+        background: #e8f5e8;
+        color: var(--success);
+        border-color: #c8e6c9;
+    }
+
+    .status-item.unavailable {
+        background: #ffeaea;
+        color: var(--error);
+        border-color: #ffcdd2;
+    }
+
+    .status-item i {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .status-item .label {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        font-size: 1.1rem;
+        color: var(--text-primary);
+    }
+
+    .status-item .status {
+        font-size: 1rem;
+        color: #454545;
+        font-weight: 500;
+    }
+
+    /* Dashboard Cards */
+    .dashboard-card {
+        background: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        padding: 1.5rem 1.5rem 1rem 1.5rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid var(--border);
+    }
+
+    .dashboard-card-header {
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .dashboard-card-header i {
+        font-size: 1.5rem;
+    }
+
+    .dashboard-card-content ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dashboard-card-content li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #ececec;
+    }
+
+    .dashboard-card-content li:last-child {
+        border-bottom: none;
+    }
+
+    .dashboard-card-content a {
+        color: var(--primary);
+        text-decoration: none;
+        flex: 1;
+        font-size: 1rem;
+    }
+
+    .dashboard-card-content a:hover {
+        color: var(--primary-dark);
+    }
+
+    .dashboard-card-content .count {
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-left: 1rem;
+    }
+
+    /* Apps List Grid Layout */
+    .apps-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+
+
+    /* Responsive Design */
+    @media (max-width: 700px) {
+        #content {
+            padding: 1rem;
+            margin: 1rem auto !important;
+        }
+        
+        .dashboard-section {
+            padding: 1rem 0.5rem;
+        }
+        
+        .quick-actions-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .status-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .apps-list {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        #header #branding h1 {
+            padding: 1rem;
+        }
+        
+        .header-controls {
+            padding: 1rem;
+        }
+    }
+
+    /* Form styling */
+    .form-row {
+        margin-bottom: 1rem;
+    }
+
+    .form-row label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 1rem;
+    }
+
+    .form-row input, .form-row select, .form-row textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 16px;
+        transition: border-color 0.2s;
+    }
+
+    .form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(229, 115, 115, 0.1);
+    }
+
+    /* Button styling */
+    .submit-row {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .submit-row input[type="submit"] {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .submit-row input[type="submit"]:hover {
+        background: var(--primary-dark);
+    }
+
+    /* Table styling */
+    .results {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        overflow: hidden;
+    }
+
+    .results th {
+        background: var(--primary);
+        color: white;
+        padding: 1rem;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .results td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border);
+        font-size: 16px;
+    }
+
+    .results tr:hover {
+        background: #f8f9fa;
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <i class="fas fa-cog"></i> Katomart Admin
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+<div class="header-controls">
+    <!-- Language Selector -->
+    <div class="header-lang-select">
+        <select onchange="changeLanguage(this.value)">
+            <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>🇺🇸 English</option>
+            <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
+            <option value="pt" {% if LANGUAGE_CODE == 'pt' %}selected{% endif %}>🇧🇷 Português</option>
+        </select>
+    </div>
+    
+    <!-- User Menu -->
+    <div class="header-user-menu">
+        <button class="header-user-btn" type="button">
+            <i class="fas fa-user"></i>
+        </button>
+        <div class="header-user-dropdown">
+            <a href="/" target="_blank">
+                <i class="fas fa-external-link-alt"></i> View Site
+            </a>
+            <a href="{% url 'admin:logout' %}">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+function changeLanguage(lang) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{% url "set_language" %}';
+    
+    const csrfToken = document.createElement('input');
+    csrfToken.type = 'hidden';
+    csrfToken.name = 'csrfmiddlewaretoken';
+    csrfToken.value = '{{ csrf_token }}';
+    
+    const languageInput = document.createElement('input');
+    languageInput.type = 'hidden';
+    languageInput.name = 'language';
+    languageInput.value = lang;
+    
+    const nextInput = document.createElement('input');
+    nextInput.type = 'hidden';
+    nextInput.name = 'next';
+    nextInput.value = '{{ request.path }}';
+    
+    form.appendChild(csrfToken);
+    form.appendChild(languageInput);
+    form.appendChild(nextInput);
+    
+    document.body.appendChild(form);
+    form.submit();
+}
+</script>
+{% endblock %} 

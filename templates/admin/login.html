@@ -1,0 +1,178 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'en' }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans 'KatoMart Admin Login' %}</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ef5350;
+            --primary-dark: #e53935;
+            --background: #f0f2f5;
+            --surface: #fff;
+            --error: #f44336;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: var(--surface);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(239, 83, 80, 0.10);
+            padding: 2.5rem 2rem 2rem 2rem;
+            width: 100%;
+            max-width: 360px;
+            margin: 2rem auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .login-header h1 {
+            color: var(--primary);
+            font-weight: 500;
+            font-size: 1.7rem;
+            margin: 0 0 0.5rem 0;
+        }
+        .login-header p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.98rem;
+        }
+        .login-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .form-row label {
+            font-size: 0.97rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.15rem;
+        }
+        .form-row input {
+            width: 90%;
+            max-width: 320px;
+            margin: 0 auto;
+            padding: 0.85rem 1rem;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            display: block;
+        }
+        .form-row input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.10);
+        }
+        .submit-row {
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+        .submit-row input[type=submit] {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .submit-row input[type=submit]:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(239, 83, 80, 0.13);
+        }
+        .errorlist, .errornote {
+            background: #ffebee;
+            color: var(--error);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            list-style: none;
+            font-size: 0.97rem;
+            width: 100%;
+            text-align: left;
+        }
+        .errorlist li {
+            margin-bottom: 0.25rem;
+        }
+        .errorlist li:last-child {
+            margin-bottom: 0;
+        }
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 1.5rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="login-header">
+        <h1><i class="fas fa-cog"></i> {% trans 'KatoMart Admin' %}</h1>
+        <p>{% trans 'Please sign in to continue' %}</p>
+    </div>
+    {% if form.errors and not form.non_field_errors %}
+    <div class="errornote">
+        {% blocktrans count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </div>
+    {% endif %}
+    {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+    <div class="errornote">{{ error }}</div>
+    {% endfor %}
+    {% endif %}
+    <form action="{{ app_path }}" method="post" class="login-form" id="login-form">{% csrf_token %}
+        <div class="form-row">
+            <label for="id_username">{% trans 'Username' %}</label>
+            <input type="text" name="username" id="id_username" required autofocus>
+        </div>
+        <div class="form-row">
+            <label for="id_password">{% trans 'Password' %}</label>
+            <input type="password" name="password" id="id_password" required>
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="{% trans 'Sign in' %}">
+        </div>
+    </form>
+    <div style="margin-top:1.5rem; text-align:center; width:100%;">
+        {% url 'admin_password_reset' as password_reset_url %}
+        {% if password_reset_url %}
+        <a href="{{ password_reset_url }}" style="color:var(--primary);text-decoration:underline;font-size:0.97rem;">{% trans 'Forgotten your login credentials?' %}</a>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html> 
