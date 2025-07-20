@@ -99,7 +99,6 @@ class SystemConfig(models.Model):
         # should_download_drm_content can only be True if bento4 is available
         if self.should_download_drm_content and not self.bento4_available:
             self.should_download_drm_content = False
-        self.save()
 
     def save(self, *args, **kwargs):
         self.auto_detect_tools()
