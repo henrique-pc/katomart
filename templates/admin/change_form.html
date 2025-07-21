@@ -3,172 +3,287 @@
 
 {% block extrastyle %}
 {{ block.super }}
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
 <style>
-    .form-container {
-        background: var(--surface);
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        overflow: hidden;
-        margin-bottom: 2rem;
-        padding: 2rem 2.5rem;
-        max-width: 700px;
-        margin-left: auto;
-        margin-right: auto;
+  :root {
+    --primary: #ef5350;
+    --primary-dark: #b71c1c;
+    --accent: #ffd54f;
+    --background: #f6f7fb;
+    --surface: #fff;
+    --surface-dark: #f3f3f3;
+    --border: #e0e0e0;
+    --shadow: 0 2px 16px 0 rgba(239, 83, 80, 0.08);
+    --text-primary: #212529;
+    --text-secondary: #757575;
+    --error: #ef5350;
+    --success: #43a047;
+  }
+  body, .content, #content-main {
+    background: var(--background) !important;
+  }
+  /* Card-style fieldset */
+  fieldset.module, .module.aligned, .module {
+    background: var(--surface);
+    border-radius: 18px;
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 2.25rem 2rem 1.5rem 2rem;
+    margin-bottom: 2.5rem;
+    transition: box-shadow 0.2s;
+  }
+  fieldset.module:hover, .module.aligned:hover, .module:hover {
+    box-shadow: 0 4px 24px 0 rgba(239, 83, 80, 0.13);
+  }
+  .fieldset-heading {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff !important;
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.01em;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+    padding: 0.7em 1.5em;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(239, 83, 80, 0.13);
+    display: inline-block;
+    border: none !important;
+  }
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    position: relative;
+    font-family: 'Inter', sans-serif;
+  }
+  .form-row label, .fieldset-heading {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.01em;
+  }
+  .form-row input[type="text"],
+  .form-row input[type="email"],
+  .form-row input[type="password"],
+  .form-row input[type="number"],
+  .form-row input[type="url"],
+  .form-row input[type="date"],
+  .form-row input[type="datetime-local"],
+  .form-row select,
+  .form-row textarea {
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    background: var(--surface-dark);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+  }
+  .form-row input:focus,
+  .form-row select:focus,
+  .form-row textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(239, 83, 80, 0.10);
+  }
+  .form-row .help {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-top: 0.15rem;
+    margin-bottom: 0.25rem;
+    opacity: 0.85;
+  }
+  .form-row.errors input,
+  .form-row.errors select,
+  .form-row.errors textarea {
+    border-color: var(--error);
+    background: #fff6f6;
+  }
+  .form-row .errorlist,
+  .form-row .errornote,
+  .form-row .errors {
+    color: var(--error);
+    background: #fff6f6;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-size: 0.97rem;
+    font-weight: 500;
+    margin: 0.25rem 0 0.5rem 0;
+    border: 1px solid var(--error);
+    box-shadow: 0 2px 8px rgba(239, 83, 80, 0.08);
+  }
+  .errornote {
+    color: var(--error) !important;
+    background: #fff6f6 !important;
+    border-radius: 6px;
+    padding: 0.75rem 1.25rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    border: 1.5px solid var(--error);
+    box-shadow: 0 2px 8px rgba(239, 83, 80, 0.10);
+  }
+  .readonly {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    color: #757575;
+    font-size: 1rem;
+  }
+  /* Modern Button Styles */
+  .submit-row {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 1.5rem 0 0.5rem 0;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+  }
+  .submit-row input[type="submit"], .submit-row button, .button, input[type="submit"], button[type="submit"] {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 0.95rem 2.5rem !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    font-family: 'Inter', sans-serif !important;
+    box-shadow: 0 4px 16px rgba(239, 83, 80, 0.13) !important;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    letter-spacing: 0.02em;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+  }
+  .submit-row input[type="submit"]:hover, .submit-row button:hover, .button:hover, input[type="submit"]:hover, button[type="submit"]:hover {
+    background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%) !important;
+    box-shadow: 0 6px 24px rgba(239, 83, 80, 0.18) !important;
+    transform: translateY(-2px) scale(1.05) !important;
+  }
+  /* Toggle Switch for Boolean Fields */
+  .form-row input[type="checkbox"] {
+    display: none;
+  }
+  .form-row .toggle-switch {
+    display: inline-block;
+    width: 48px;
+    height: 28px;
+    position: relative;
+    vertical-align: middle;
+    margin-right: 0.75rem;
+  }
+  .form-row .toggle-switch input[type="checkbox"] + .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--border);
+    border-radius: 28px;
+    transition: background 0.2s;
+  }
+  .form-row .toggle-switch input[type="checkbox"]:checked + .slider {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  }
+  .form-row .toggle-switch .slider:before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 8px rgba(239, 83, 80, 0.10);
+  }
+  .form-row .toggle-switch input[type="checkbox"]:checked + .slider:before {
+    transform: translateX(20px);
+    background: #fff;
+  }
+  .form-row .toggle-switch .slider {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+  .form-row.checkbox-row label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+  /* Card shadow for the form area */
+  #content-main > form {
+    background: var(--surface);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 2.5rem 2.5rem 1.5rem 2.5rem;
+    margin-bottom: 2.5rem;
+    border: 1.5px solid var(--border);
+  }
+  @media (max-width: 900px) {
+    #content-main > form, fieldset.module, .module.aligned, .module {
+      padding: 1.25rem 0.5rem;
     }
-    .form-header {
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        color: #fff;
-        padding: 1.25rem 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-radius: 12px 12px 0 0;
+  }
+  @media (max-width: 768px) {
+    .form-row, .fieldset-heading {
+      font-size: 0.97rem;
     }
-    .form-header h1 {
-        margin: 0;
-        font-weight: 500;
-        font-size: 1.3rem;
-        display: flex;
-        align-items: center;
+    #content-main > form, fieldset.module, .module.aligned, .module {
+      padding: 1.25rem 0.5rem;
     }
-    .form-header h1 i {
-        margin-right: 0.75rem;
-        font-size: 2rem;
-    }
-    .form-content {
-        padding: 2rem 0;
-    }
-    .form-row {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 1.5rem;
-    }
-    .form-row label {
-        margin-bottom: 0.4rem;
-        font-weight: 500;
-        color: var(--text-secondary);
-        font-size: 0.97rem;
-    }
-    .form-row input,
-    .form-row select,
-    .form-row textarea {
-        width: 100%;
-        padding: 0.85rem 1rem;
-        border: 1.5px solid #e0e0e0;
-        border-radius: 6px;
-        font-size: 1rem;
-        background: #fff;
-        transition: border-color 0.2s, box-shadow 0.2s;
-        margin-bottom: 0.2rem;
-    }
-    .form-row input:focus,
-    .form-row select:focus,
-    .form-row textarea:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.10);
-    }
-    .form-row .help {
-        margin-top: 0.25rem;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-    }
-    .form-row .errors {
-        margin-top: 0.25rem;
-        color: var(--error);
-        font-size: 0.97rem;
-    }
-    .submit-row {
-        background: var(--surface);
-        padding: 1.5rem 0 0 0;
-        border-radius: 0 0 12px 12px;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 1rem;
-    }
-    .submit-row input[type="submit"] {
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        color: #fff;
-        border: none;
-        padding: 0.85rem 2rem;
-        border-radius: 6px;
-        font-size: 1rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background 0.2s, box-shadow 0.2s;
-    }
-    .submit-row input[type="submit"]:hover {
-        background: var(--primary-dark);
-        box-shadow: 0 4px 12px rgba(25, 118, 210, 0.13);
-    }
-    .submit-row input[type="submit"].default {
-        background: var(--accent-color);
-    }
-    .submit-row input[type="submit"].default:hover {
-        background: #e91e63;
-    }
-    .submit-row .deletelink {
-        background: var(--error);
-        color: #fff;
-        padding: 0.85rem 2rem;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 1rem;
-        font-weight: 500;
-        transition: background 0.2s;
-    }
-    .submit-row .deletelink:hover {
-        background: #d32f2f;
-        color: #fff;
-        text-decoration: none;
-    }
-    /* Object tools */
-    .object-tools {
-        margin-bottom: 2rem;
-    }
-
-    .object-tools li {
-        display: inline-block;
-        margin-right: 1rem;
-    }
-
-    .object-tools a {
-        background: var(--primary-color);
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 4px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        font-weight: 500;
-        transition: background-color 0.2s, transform 0.2s;
-    }
-
-    .object-tools a:hover {
-        background: var(--primary-dark);
-        transform: translateY(-1px);
-        color: white;
-        text-decoration: none;
-    }
-    @media (max-width: 700px) {
-        .form-container {
-            padding: 1rem 0.5rem;
-        }
-    }
-    /* Readonly fields */
-    .readonly {
-        background: #f5f5f5;
-        color: var(--text-secondary);
-    }
-
-    /* Required field indicator */
-    .required::after {
-        content: " *";
-        color: var(--error);
-    }
+  }
 </style>
+<script>
+  // Convert all boolean checkboxes to toggle switches on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.form-row input[type="checkbox"]').forEach(function(checkbox) {
+      if (!checkbox.closest('.toggle-switch')) {
+        var label = checkbox.parentElement.querySelector('label[for="' + checkbox.id + '"]');
+        var wrapper = document.createElement('span');
+        wrapper.className = 'toggle-switch';
+        checkbox.parentElement.insertBefore(wrapper, checkbox);
+        wrapper.appendChild(checkbox);
+        var slider = document.createElement('span');
+        slider.className = 'slider';
+        checkbox.parentElement.insertBefore(slider, checkbox.nextSibling);
+        if (label) {
+          label.style.cursor = 'pointer';
+        }
+      }
+    });
+  });
+</script>
+<script>
+// Replace readonly boolean icons with Material Design SVGs
+window.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('img[src$="icon-yes.svg"]').forEach(function(img) {
+    var svg = document.createElement('span');
+    svg.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" style="fill:#43a047;vertical-align:middle;"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>';
+    img.replaceWith(svg);
+  });
+  document.querySelectorAll('img[src$="icon-no.svg"]').forEach(function(img) {
+    var svg = document.createElement('span');
+    svg.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" viewBox="0 0 24 24" style="fill:#ef5350;vertical-align:middle;"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>';
+    img.replaceWith(svg);
+  });
+});
+</script>
 {% endblock %}
 
 {% block object-tools-items %}
