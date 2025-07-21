@@ -52,6 +52,7 @@ class SystemConfig(models.Model):
     mkvtoolnix_path = models.CharField(max_length=512, blank=True, null=True)
     rclone_available = models.BooleanField(default=False)  # type: ignore[attr-defined]
     rclone_path = models.CharField(max_length=512, blank=True, null=True)
+    application_key = models.CharField(max_length=128, blank=True, null=True, help_text="SHA512 hash for unlocking extra features")
 
     @classmethod
     def get_solo(cls):

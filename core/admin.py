@@ -13,26 +13,25 @@ from .models import (
 class SystemConfigAdmin(admin.ModelAdmin):
     """Admin interface for System Configuration"""
     
-    list_display = ('debug', 'download_path', 'ffmpeg_available', 'bento4_available', 'aria2c_available')
-    list_filter = ('debug', 'ffmpeg_available', 'bento4_available', 'aria2c_available', 'geckodriver_available', 'chromedriver_available')
-    readonly_fields = ('ffmpeg_available', 'bento4_available', 'aria2c_available', 'geckodriver_available', 'chromedriver_available', 'mkvtoolnix_available', 'rclone_available')
-    
+    list_display = ("id", "download_path", "debug", "should_download_drm_content", "application_key")
     fieldsets = (
-        (_('General Settings'), {
-            'fields': ('debug', 'download_path', 'should_download_drm_content')
+        (None, {
+            'fields': ("download_path", "debug", "should_download_drm_content", "application_key")
         }),
-        (_('Tool Paths'), {
+        ("Tool Availability", {
             'fields': (
-                ('ffmpeg_path', 'ffmpeg_available'),
-                ('bento4_path', 'bento4_available'),
-                ('aria2c_path', 'aria2c_available'),
-                ('geckodriver_path', 'geckodriver_available'),
-                ('chromedriver_path', 'chromedriver_available'),
-                ('mkvtoolnix_path', 'mkvtoolnix_available'),
-                ('rclone_path', 'rclone_available'),
-            )
+                "ffmpeg_available", "ffmpeg_path",
+                "bento4_available", "bento4_path",
+                "aria2c_available", "aria2c_path",
+                "geckodriver_available", "geckodriver_path",
+                "chromedriver_available", "chromedriver_path",
+                "mkvtoolnix_available", "mkvtoolnix_path",
+                "rclone_available", "rclone_path",
+            ),
         }),
     )
+    list_filter = ('debug', 'ffmpeg_available', 'bento4_available', 'aria2c_available', 'geckodriver_available', 'chromedriver_available')
+    readonly_fields = ('ffmpeg_available', 'bento4_available', 'aria2c_available', 'geckodriver_available', 'chromedriver_available', 'mkvtoolnix_available', 'rclone_available')
     
     def has_add_permission(self, request):
         # Only allow one SystemConfig instance
