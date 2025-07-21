@@ -7,18 +7,21 @@
 <div class="dashboard-section">
     <h2><i class="fas fa-bolt"></i> {% trans 'Quick Actions' %}</h2>
     <div class="quick-actions-grid">
-        <a href="{% url 'admin:core_platform_add' %}" class="quick-action-btn">
-            <i class="fas fa-plus"></i>{% trans 'Add Platform' %}
+        <a href="{% url 'admin:core_systemconfig_changelist' %}" class="quick-action-btn" style="background:linear-gradient(90deg,#ef5350,#b71c1c);color:#fff;">
+            <i class="material-icons" style="vertical-align:middle;">settings</i> {% trans 'System Config' %}
         </a>
-        <a href="{% url 'admin:core_course_add' %}" class="quick-action-btn">
-            <i class="fas fa-book"></i>{% trans 'Add Course' %}
+        <button class="quick-action-btn" style="background:linear-gradient(90deg,#ef5350,#b71c1c);color:#fff;" onclick="alert('Cancel all downloads placeholder')">
+            <i class="material-icons" style="vertical-align:middle;">cancel_schedule_send</i> {% trans 'Cancel All Downloads' %}
+        </button>
+        <button class="quick-action-btn" style="background:linear-gradient(90deg,#ef5350,#b71c1c);color:#fff;" onclick="alert('Rescan URL JSONs placeholder')">
+            <i class="material-icons" style="vertical-align:middle;">sync</i> {% trans 'Rescan URL JSONs' %}
+        </button>
+        <a href="{% url 'admin:auth_user_add' %}" class="quick-action-btn" style="background:linear-gradient(90deg,#ef5350,#b71c1c);color:#fff;">
+            <i class="material-icons" style="vertical-align:middle;">person_add</i> {% trans 'Create User Account' %}
         </a>
-        <a href="{% url 'admin:core_systemconfig_changelist' %}" class="quick-action-btn">
-            <i class="fas fa-cog"></i>{% trans 'System Config' %}
-        </a>
-        <a href="{% url 'admin:core_platformauth_add' %}" class="quick-action-btn">
-            <i class="fas fa-shield-alt"></i>{% trans 'Add Auth' %}
-        </a>
+        <button class="quick-action-btn" style="background:linear-gradient(90deg,#ef5350,#b71c1c);color:#fff;" onclick="alert('[SPONSORS] Sync all caches placeholder')">
+            <i class="material-icons" style="vertical-align:middle;">sync_alt</i> [SPONSORS] Sync all caches
+        </button>
     </div>
 </div>
 <div class="dashboard-section">
