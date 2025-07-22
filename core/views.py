@@ -13,6 +13,7 @@ from django.utils.decorators import method_decorator
 from .models import Course, Module, Lesson, File, SystemConfig, PlatformAuth, UserFormattedName, UserConfig
 from .serializers import CourseSerializer, ModuleSerializer, LessonSerializer, FileSerializer, SystemConfigSerializer, PlatformAuthSerializer, UserFormattedNameSerializer, UserConfigSerializer
 from django.contrib.auth import get_user_model
+from django.views import View
 
 User = get_user_model()
 
@@ -106,3 +107,7 @@ class UserConfigViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class RootAppView(View):
+    def get(self, request):
+        return render(request, 'root_app.html')

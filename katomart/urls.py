@@ -25,6 +25,8 @@ urlpatterns = [
 
 urlpatterns += i18n_patterns(
     path('admin/', admin.site.urls),
-    path('', include('core.urls')),
+    path('', __import__('core.views', fromlist=['RootAppView']).RootAppView.as_view(), name='root-app'),
+    path('core/', include('core.urls')),
+    path('backups/', include('backups.urls')),
     prefix_default_language=False,
 )

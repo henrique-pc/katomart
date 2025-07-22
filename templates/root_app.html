@@ -1,0 +1,82 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block branding %}{% endblock %}
+
+{% block nav-global %}
+<div class="header-controls" style="justify-content: space-between; width: 100%;">
+    <div style="display:flex; align-items:center;">
+        <div class="header-lang-select">
+            <select onchange="changeLanguage(this.value)">
+                <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>🇺🇸 English</option>
+                <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>🇪🇸 Español</option>
+                <option value="pt" {% if LANGUAGE_CODE == 'pt' %}selected{% endif %}>🇧🇷 Português</option>
+            </select>
+        </div>
+    </div>
+    <div style="display:flex; align-items:center;">
+        <a href="/admin/doc/" style="color:white; font-weight:600; text-decoration:none; margin-left:2rem; display:flex; align-items:center;">
+            <i class="material-icons" style="vertical-align:middle; margin-right:0.3rem;">help_outline</i> Help (Documentation)
+        </a>
+    </div>
+</div>
+<script>
+function changeLanguage(lang) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{% url "set_language" %}';
+
+    const csrfToken = document.createElement('input');
+    csrfToken.type = 'hidden';
+    csrfToken.name = 'csrfmiddlewaretoken';
+    csrfToken.value = '{{ csrf_token }}';
+
+    const languageInput = document.createElement('input');
+    languageInput.type = 'hidden';
+    languageInput.name = 'language';
+    languageInput.value = lang;
+
+    const nextInput = document.createElement('input');
+    nextInput.type = 'hidden';
+    nextInput.name = 'next';
+    nextInput.value = '{{ request.path }}';
+
+    form.appendChild(csrfToken);
+    form.appendChild(languageInput);
+    form.appendChild(nextInput);
+
+    document.body.appendChild(form);
+    form.submit();
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-section" style="max-width: 600px; margin: 3rem auto; text-align: center;">
+    <h2 style="margin-bottom: 2rem; font-size:2.5rem; font-weight:700; letter-spacing:2px; color:#ef5350;">
+        Katomart <span style="font-size:1.5rem; vertical-align:super;">&copy;</span>
+    </h2>
+    <div class="quick-actions-grid" style="gap: 2rem;">
+        <a href="/admin/" class="quick-action-btn" style="font-size:1.2rem;">
+            <i class="material-icons" style="font-size:2rem;vertical-align:middle;">admin_panel_settings</i> Admin Panel
+        </a>
+        <a href="/core/api/login/" class="quick-action-btn" style="font-size:1.2rem;">
+            <i class="material-icons" style="font-size:2rem;vertical-align:middle;">cloud_download</i> Downloader Login
+        </a>
+        <a href="/cognitahz/" class="quick-action-btn" style="font-size:1.2rem;">
+            <i class="material-icons" style="font-size:2rem;vertical-align:middle;">psychology</i> Cognitahz Login
+        </a>
+        <a href="/backups/" class="quick-action-btn" style="font-size:1.2rem;">
+            <i class="material-icons" style="font-size:2rem;vertical-align:middle;">backup</i> Backups Login
+        </a>
+    </div>
+    <div style="margin-top:2.5rem; text-align:left; font-size:1.08rem; color:#333; background:#fff8f8; border-radius:10px; box-shadow:0 1px 4px rgba(239,83,80,0.07); padding:1.5rem;">
+        <ul style="list-style: disc inside; margin-bottom:0;">
+            <li><b>Admin Panel</b>: Used to control user accounts, system settings, and monitor the system.</li>
+            <li><b>Downloads</b>: The core system for users to access and manage downloads. <b>Note:</b> Setup in the Admin Panel must be completed first.</li>
+            <li><b>Cognitahz</b>: A proprietary platform for users to consume their downloaded content, combining the best features from various platforms.</li>
+            <li><b>Backups</b>: Create backup tasks to different services you own or fetch files to your local machine.</li>
+        </ul>
+    </div>
+</div>
+{% endblock %} 
