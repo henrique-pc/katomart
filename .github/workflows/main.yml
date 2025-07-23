@@ -1,35 +1,32 @@
 # Nome do Workflow
 name: Criar Executável para Windows e Linux
 
-# Gatilho: Roda manualmente ou a cada 'push' na branch 'main'
 on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
 
-# Tarefas que o workflow irá executar
 jobs:
-  # Tarefa para criar a versão de Windows
   build-windows:
     runs-on: windows-latest
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
-
       - name: Configurar Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Instalar dependências do projeto
+      # PASSO NOVO: Modifica o settings.py para salvar o BD no lugar certo
+      - name: Modificar o caminho do banco de dados no Windows
+        run: (Get-Content katomart\settings.py) -replace "NAME': BASE_DIR / 'db.sqlite3'", "NAME': 'db.sqlite3'" | Set-Content katomart\settings.py
+
+      - name: Instalar dependências e PyInstaller
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pyinstaller
 
-      - name: Instalar PyInstaller
-        run: pip install pyinstaller
-
-      # MUDANÇA AQUI: Adicionamos --add-data para incluir as pastas 'templates' e 'locale'
       - name: Criar o executável (.exe)
         run: pyinstaller --onefile --name katomart-downloader --add-data "templates;templates" --add-data "locale;locale" manage.py
 
@@ -39,30 +36,29 @@ jobs:
           name: katomart-windows-exe
           path: dist/katomart-downloader.exe
 
-  # Tarefa para criar a versão de Linux
   build-linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
-
       - name: Configurar Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Instalar dependências do projeto
+      # PASSO NOVO: Modifica o settings.py para salvar o BD no lugar certo
+      - name: Modificar o caminho do banco de dados no Linux
+        run: sed -i "s/NAME': BASE_DIR \/ 'db.sqlite3'/NAME': 'db.sqlite3'/g" katomart/settings.py
+
+      - name: Instalar dependências e PyInstaller
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pyinstaller
 
-      - name: Instalar PyInstaller
-        run: pip install pyinstaller
-      
-      # MUDANÇA AQUI: Adicionamos --add-data para incluir as pastas 'templates' e 'locale'
       - name: Criar o executável
         run: pyinstaller --onefile --name katomart-downloader --add-data "templates:templates" --add-data "locale:locale" manage.py
-
+      
       - name: Fazer upload do executável do Linux
         uses: actions/upload-artifact@v4
         with:
