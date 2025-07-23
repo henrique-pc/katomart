@@ -11,35 +11,28 @@ on:
 jobs:
   # Tarefa para criar a versão de Windows
   build-windows:
-    # Usa uma máquina virtual do Windows
     runs-on: windows-latest
-
     steps:
-      # 1. Baixa o código do seu repositório
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      # 2. Configura o ambiente Python 3.12
       - name: Configurar Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      # 3. Instala as bibliotecas listadas no requirements.txt
       - name: Instalar dependências do projeto
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 4. Instala o PyInstaller, a ferramenta que cria o executável
       - name: Instalar PyInstaller
         run: pip install pyinstaller
 
-      # 5. Roda o PyInstaller para criar um único arquivo executável
+      # MUDANÇA AQUI: Adicionamos --add-data para incluir as pastas 'templates' e 'locale'
       - name: Criar o executável (.exe)
-        run: pyinstaller --onefile --name katomart-downloader manage.py
+        run: pyinstaller --onefile --name katomart-downloader --add-data "templates;templates" --add-data "locale;locale" manage.py
 
-      # 6. Disponibiliza o executável para download como um artefato
       - name: Fazer upload do executável do Windows
         uses: actions/upload-artifact@v4
         with:
@@ -48,9 +41,7 @@ jobs:
 
   # Tarefa para criar a versão de Linux
   build-linux:
-    # Usa uma máquina virtual do Ubuntu (Linux)
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -67,9 +58,10 @@ jobs:
 
       - name: Instalar PyInstaller
         run: pip install pyinstaller
-
+      
+      # MUDANÇA AQUI: Adicionamos --add-data para incluir as pastas 'templates' e 'locale'
       - name: Criar o executável
-        run: pyinstaller --onefile --name katomart-downloader manage.py
+        run: pyinstaller --onefile --name katomart-downloader --add-data "templates:templates" --add-data "locale:locale" manage.py
 
       - name: Fazer upload do executável do Linux
         uses: actions/upload-artifact@v4
