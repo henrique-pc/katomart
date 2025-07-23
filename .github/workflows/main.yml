@@ -17,7 +17,6 @@ jobs:
         with:
           python-version: '3.12'
 
-      # <-- MUDANÇA AQUI: Corrigindo a sintaxe do comando run
       - name: Modificar o caminho do banco de dados no Windows
         run: |
           (Get-Content katomart\settings.py) -replace "NAME': BASE_DIR / 'db.sqlite3'", "NAME': 'db.sqlite3'" | Set-Content katomart\settings.py
@@ -47,8 +46,10 @@ jobs:
         with:
           python-version: '3.12'
 
+      # <-- MUDANÇA AQUI: Corrigindo a sintaxe do comando run
       - name: Modificar o caminho do banco de dados no Linux
-        run: sed -i "s/NAME': BASE_DIR \/ 'db.sqlite3'/NAME': 'db.sqlite3'/g" katomart/settings.py
+        run: |
+          sed -i "s/NAME': BASE_DIR \/ 'db.sqlite3'/NAME': 'db.sqlite3'/g" katomart/settings.py
 
       - name: Instalar dependências e PyInstaller
         run: |
