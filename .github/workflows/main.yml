@@ -17,10 +17,11 @@ jobs:
         with:
           python-version: '3.12'
 
-      # PASSO NOVO: Modifica o settings.py para salvar o BD no lugar certo
+      # <-- MUDANÇA AQUI: Corrigindo a sintaxe do comando run
       - name: Modificar o caminho do banco de dados no Windows
-        run: (Get-Content katomart\settings.py) -replace "NAME': BASE_DIR / 'db.sqlite3'", "NAME': 'db.sqlite3'" | Set-Content katomart\settings.py
-
+        run: |
+          (Get-Content katomart\settings.py) -replace "NAME': BASE_DIR / 'db.sqlite3'", "NAME': 'db.sqlite3'" | Set-Content katomart\settings.py
+      
       - name: Instalar dependências e PyInstaller
         run: |
           python -m pip install --upgrade pip
@@ -46,7 +47,6 @@ jobs:
         with:
           python-version: '3.12'
 
-      # PASSO NOVO: Modifica o settings.py para salvar o BD no lugar certo
       - name: Modificar o caminho do banco de dados no Linux
         run: sed -i "s/NAME': BASE_DIR \/ 'db.sqlite3'/NAME': 'db.sqlite3'/g" katomart/settings.py
 
